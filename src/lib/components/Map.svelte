@@ -2,7 +2,6 @@
 	import { PUBLIC_MAPTILER_KEY } from '$env/static/public';
 	import { MAPSTORE_CONTEXT_KEY, type MapStore } from '$lib/stores';
 	import {
-		AttributionControl,
 		GeolocateControl,
 		GlobeControl,
 		Map,
@@ -28,6 +27,18 @@
 			hash: true,
 			attributionControl: false,
 		});
+
+		const geolocateControl = new GeolocateControl({
+			positionOptions: { enableHighAccuracy: true },
+			trackUserLocation: true,
+		});
+
+		map.addControl(geolocateControl, 'top-right');
+		map.addControl(new NavigationControl({}), 'top-right');
+		map.addControl(new GlobeControl(), 'top-right');
+		map.addControl(new ScaleControl({ maxWidth: 80, unit: 'metric' }), 'bottom-left');
+
+		map.on('load', () => geolocateControl.trigger());
 
 		mapStore?.set(map);
 	});
