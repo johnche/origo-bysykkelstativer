@@ -1,0 +1,49 @@
+<script lang="ts">
+	import { PUBLIC_MAPTILER_KEY } from '$env/static/public';
+	import { MAPSTORE_CONTEXT_KEY, type MapStore } from '$lib/stores';
+	import {
+		AttributionControl,
+		GeolocateControl,
+		GlobeControl,
+		Map,
+		NavigationControl,
+		ScaleControl,
+		type LngLatLike,
+	} from 'maplibre-gl';
+	import { getContext, onMount } from 'svelte';
+
+	const osloCoordinate: LngLatLike = [10.75, 59.91];
+
+	let mapStore: MapStore = getContext(MAPSTORE_CONTEXT_KEY);
+
+	let mapContainer: HTMLDivElement | undefined = $state();
+
+	onMount(() => {
+		if (!mapContainer) return;
+		const map = new Map({
+			container: mapContainer,
+			style: `https://api.maptiler.com/maps/streets-v2-pastel/style.json?key=${PUBLIC_MAPTILER_KEY}`,
+			center: osloCoordinate,
+			zoom: 12,
+			hash: true,
+			attributionControl: false,
+		});
+
+		mapStore?.set(map);
+	});
+</script>
+
+<div class="map" data-testid="map" bind:this={mapContainer}></div>
+
+<style>
+	@import 'maplibre-gl/dist/maplibre-gl.css';
+
+	.map {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 100dvw;
+		height: 100dvh;
+		overflow: hidden;
+	}
+</style>
