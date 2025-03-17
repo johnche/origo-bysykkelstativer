@@ -12,6 +12,6 @@ const devConfig = {
 	level: 'debug',
 };
 
-const config = process.env['NODE_ENV'] === 'production' ? prodConfig : devConfig;
+const config = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;
 
 export const logger: Logger = pino(config);
