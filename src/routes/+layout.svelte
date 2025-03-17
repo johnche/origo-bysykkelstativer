@@ -11,7 +11,7 @@
 			min-height: 100vh;
 			/* mobile viewport bug fix */
 			min-height: -webkit-fill-available;
-			font-family: ProximaNova, sans-serif;
+			font-family: Droid, sans-serif;
 		}
 
 		html {
@@ -20,4 +20,22 @@
 	</style>
 </svelte:head>
 
-{@render children()}
+<main>
+	<nav>Oslo Bysykkel 🚲</nav>
+	{@render children()}
+</main>
+
+<style>
+	main {
+		height: 100dvh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	nav {
+		height: 4rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>

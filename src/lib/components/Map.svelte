@@ -50,11 +50,7 @@
 	@import 'maplibre-gl/dist/maplibre-gl.css';
 
 	.map {
-		position: absolute;
-		top: 0;
-		bottom: 0;
 		width: 100dvw;
-		height: 100dvh;
-		overflow: hidden;
+		height: 100%;
 	}
 </style>
