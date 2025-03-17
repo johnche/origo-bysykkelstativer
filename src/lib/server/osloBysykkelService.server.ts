@@ -1,33 +1,10 @@
-import type { StationInformation, StationStatus } from '$lib/api/osloBysykkel/types';
+import type { StationStatus } from '$lib/api/osloBysykkel/types';
 import { osloBysykkel } from '$lib/api';
 import { redis } from '$lib/server';
 import { logger } from '$lib/server';
-import { geo } from '$lib/utils';
-import type { Stations, Status } from './types';
+import type { Status } from './types';
 
 const log = logger.child({ module: 'oslo-bysykkel-service' });
-
-const transformToGeoJSONFeature = (stations: StationInformation) => {
-	const stationsById: Record<string, geo.Feature> = {};
-
-	stations.data.stations.forEach((station) => {
-		stationsById[station.station_id] = {
-			type: 'Feature',
-			properties: {
-				id: station.station_id,
-				name: station.name,
-				address: station.address,
-				description: station.cross_street,
-			},
-			geometry: {
-				type: 'Point',
-				coordinates: [station.lon, station.lat],
-			},
-		};
-	});
-
-	return stationsById;
-};
 
 const transformToStationLookup = (status: StationStatus) => {
 	const statusByStation: Status = {};
@@ -39,10 +16,14 @@ const transformToStationLookup = (status: StationStatus) => {
 	return statusByStation;
 };
 
+const publishStatus = (status: StationStatus) => {
+	redis.publishStatus(JSON.stringify(status));
+	return status;
+};
+
 export const updateStationData = () =>
 	osloBysykkel
 		.getStations()
-		//.then(transformToGeoJSONFeature)
 		.then(JSON.stringify)
 		.then(redis.setStations)
 		.catch((e) => log.error('failed to update station data', e));
@@ -50,6 +31,7 @@ export const updateStationData = () =>
 export const updateStationStatusData = () =>
 	osloBysykkel
 		.getStatus()
+		.then(publishStatus)
 		.then(transformToStationLookup)
 		.then(JSON.stringify)
 		.then(redis.setStationStatus)

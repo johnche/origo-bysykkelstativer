@@ -1,25 +1,43 @@
 <script lang="ts">
 	import Map from '$lib/components/Map.svelte';
-	import { createMapStore, MAPSTORE_CONTEXT_KEY } from '$lib/stores';
+	import { createStatusListenerStore, createMapStore, MAPSTORE_CONTEXT_KEY } from '$lib/stores';
 	import { Marker, Popup } from 'maplibre-gl';
-	import { onMount, setContext } from 'svelte';
-
-	const mapStore = createMapStore();
-	setContext(MAPSTORE_CONTEXT_KEY, mapStore);
+	import { onDestroy, onMount, setContext } from 'svelte';
+	import { createPopupContent } from './popup';
 
 	let { data } = $props();
 
+	const statusListenerStore = createStatusListenerStore(data.status);
+	const mapStore = createMapStore();
+	setContext(MAPSTORE_CONTEXT_KEY, mapStore);
+
+	const markers: Record<string, Marker> = {};
+
 	onMount(() => {
 		data.stations.forEach((station) => {
-			const popup = new Popup({ offset: 25 }).setHTML(`
-<h2>${station.name}</h2>
-<h3>${station.cross_street}</h3>
-<br />
-Sykler tilgjengelige: ${data.status[station.station_id]?.num_bikes_available}
-Ledige låser: ${data.status[station.station_id]?.num_docks_available}
-			`);
-			new Marker().setLngLat([station.lon, station.lat]).setPopup(popup).addTo($mapStore);
+			const popup = new Popup({ offset: 25 }).setDOMContent(
+				createPopupContent(station, $statusListenerStore[station.station_id]),
+			);
+
+			markers[station.station_id] = new Marker()
+				.setLngLat([station.lon, station.lat])
+				.setPopup(popup)
+				.addTo($mapStore);
 		});
+
+		statusListenerStore.subscribe((newStatus) => {
+			data.stations.forEach((station) => {
+				markers[station.station_id]
+					.getPopup()
+					.setDOMContent(createPopupContent(station, newStatus[station.station_id]));
+			});
+		});
+
+		statusListenerStore.listen();
+	});
+
+	onDestroy(() => {
+		statusListenerStore.cleanup();
 	});
 </script>
 

@@ -1,4 +1,4 @@
-import { OSLOBYSYKKEL_API_BASE_URL } from '$env/static/private';
+import { APP_NAME, OSLOBYSYKKEL_API_BASE_URL } from '$env/static/private';
 import { logger } from '$lib/server';
 import type { StationInformation, StationStatus } from './types';
 
@@ -9,7 +9,7 @@ const doFetch = (path: string, opts: RequestInit = {}, baseUrl = OSLOBYSYKKEL_AP
 	return fetch(`${baseUrl}${path}`, {
 		headers: {
 			...headers,
-			//"Client-Identifier": ""
+			'Client-Identifier': APP_NAME,
 		},
 		...rest,
 	});
