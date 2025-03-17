@@ -1,6 +1,9 @@
 import type { Stations, Status } from '$lib/server/types';
 
-export const createPopupContent = (station: Stations, status: Status[string]) => {
+export const createPopupContent = (
+	station: Stations['data']['stations'][number],
+	status: Status[string],
+) => {
 	const div = document.createElement('div');
 	div.innerHTML = `
 <h2 class="test">${station.name}</h2>

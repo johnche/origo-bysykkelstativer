@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
-import Map from '$lib//Map.svelte';
+import Map from '$lib/components/Map.svelte';
 
 describe('Map.svelte test', () => {
 	afterEach(() => {

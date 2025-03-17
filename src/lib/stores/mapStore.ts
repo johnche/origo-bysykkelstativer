@@ -26,7 +26,7 @@ export const createMapStore = () => {
 		layerId: string,
 		name: string,
 		value: unknown,
-		options?: StyleSetterOptions
+		options?: StyleSetterOptions,
 	) => {
 		update((state) => {
 			if (state) {
@@ -76,7 +76,7 @@ export const createMapStore = () => {
 		layerId: string,
 		name: string,
 		value: unknown,
-		options?: StyleSetterOptions
+		options?: StyleSetterOptions,
 	) => {
 		update((state) => {
 			if (state) {
@@ -114,6 +114,6 @@ export const createMapStore = () => {
 		update,
 		set,
 		setPaintProperty,
-		setLayoutProperty
+		setLayoutProperty,
 	};
 };
