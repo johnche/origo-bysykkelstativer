@@ -4,7 +4,7 @@ import { logger } from '$lib/server';
 
 const log = logger.child({ module: 'redis' });
 
-const clientBase = await createClient({
+const clientBase = createClient({
 	socket: {
 		host: REDIS_HOST,
 		port: Number(REDIS_PORT),
