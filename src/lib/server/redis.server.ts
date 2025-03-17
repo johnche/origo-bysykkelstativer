@@ -1,9 +1,15 @@
+import { REDIS_HOST, REDIS_PORT } from '$env/static/private';
 import { createClient } from 'redis';
 import { logger } from '$lib/server';
 
 const log = logger.child({ module: 'redis' });
 
-const client = await createClient()
+const client = await createClient({
+	socket: {
+		host: REDIS_HOST,
+		port: Number(REDIS_PORT),
+	},
+})
 	.on('error', (err) => log.error('Redis client error', err))
 	.connect();
 
