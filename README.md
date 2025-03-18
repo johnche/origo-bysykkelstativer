@@ -2,34 +2,40 @@
 
 Visualizes city bikes
 
-## Setup (development)
+## Usage
+
+### Requirements
+
+Make a copy of `.env.example` into either `.env` or `.env.local` or other env file needed and remember to fill in api keys.
+
+For maptiler api key, `PUBLIC_MAPTILER_KEY`, the key can be created at [maptiler website](https://cloud.maptiler.com/account/keys/).
+
+`bun` is needed for mock server, while `pnpm` is used as the main runtime.
+
+### Installation
 
 1. Install dependencies
 
-``` bash
-$ npm install
+```bash
+$ pnpm install
 ```
 
 2. Fire up redis instance
 
-``` bash
+```bash
 $ docker compose up -d redis
 ```
 
 3. (Optional) If using local mock data, run fixtures server
 
-``` bash
-$ npm run fixtures
+```bash
+$ pnpm fixtures
 ```
 
 The mock server will be listening to `localhost` on port `5050`. The environment variable `OSLOBYSYKKEL_API_BASE_URL` in `.env` should then point to `http://localhost:5050`.
 
-4. Run the app
+### Developing
 
-``` bash
-$ npm run dev
+```bash
+$ pnpm dev --open
 ```
-
-5. Open browser to `localhost:5173`
-
-Profit!
