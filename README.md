@@ -1,38 +1,35 @@
-# sv
+# Origo city bikes
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Visualizes city bikes
 
-## Creating a project
+## Setup (development)
 
-If you're seeing this, you've probably already done this step. Congrats!
+1. Install dependencies
 
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+``` bash
+$ npm install
 ```
 
-## Developing
+2. Fire up redis instance
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+``` bash
+$ docker compose up -d redis
 ```
 
-## Building
+3. (Optional) If using local mock data, run fixtures server
 
-To create a production version of your app:
-
-```bash
-npm run build
+``` bash
+$ npm run fixtures
 ```
 
-You can preview the production build with `npm run preview`.
+The mock server will be listening to `localhost` on port `5050`. The environment variable `OSLOBYSYKKEL_API_BASE_URL` in `.env` should then point to `http://localhost:5050`.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+4. Run the app
+
+``` bash
+$ npm run dev
+```
+
+5. Open browser to `localhost:5173`
+
+Profit!
