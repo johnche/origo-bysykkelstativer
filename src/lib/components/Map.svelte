@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_MAPTILER_KEY } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import { MAPSTORE_CONTEXT_KEY, type MapStore } from '$lib/stores';
 	import {
 		GeolocateControl,
@@ -21,7 +21,7 @@
 		if (!mapContainer) return;
 		const map = new Map({
 			container: mapContainer,
-			style: `https://api.maptiler.com/maps/streets-v2-pastel/style.json?key=${PUBLIC_MAPTILER_KEY}`,
+			style: `https://api.maptiler.com/maps/streets-v2-pastel/style.json?key=${env.PUBLIC_MAPTILER_KEY}`,
 			center: osloCoordinate,
 			zoom: 12,
 			hash: true,

@@ -1,17 +1,21 @@
-import { REDIS_HOST, REDIS_PORT } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { createClient } from 'redis';
 import { logger } from '$lib/server';
+import { building } from '$app/environment';
 
 const log = logger.child({ module: 'redis' });
 
 const clientBase = createClient({
 	socket: {
-		host: REDIS_HOST,
-		port: Number(REDIS_PORT),
+		host: env.REDIS_HOST,
+		port: env.REDIS_PORT ? Number(env.REDIS_PORT) : 6379,
 	},
 }).on('error', (err) => log.error('Redis client error', err));
 
-const client = await clientBase.duplicate().connect();
+const client = clientBase.duplicate();
+if (!building) {
+	client.connect();
+}
 
 export const getStations = async () => {
 	return client.get('stations');

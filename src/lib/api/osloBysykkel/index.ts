@@ -1,15 +1,15 @@
-import { APP_NAME, OSLOBYSYKKEL_API_BASE_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { logger } from '$lib/server';
 import type { StationInformation, StationStatus } from './types';
 
 const log = logger.child({ module: 'oslo-bysykkel-api' });
 
-const doFetch = (path: string, opts: RequestInit = {}, baseUrl = OSLOBYSYKKEL_API_BASE_URL) => {
+const doFetch = (path: string, opts: RequestInit = {}, baseUrl = env.OSLOBYSYKKEL_API_BASE_URL) => {
 	const { headers, ...rest } = opts;
 	return fetch(`${baseUrl}${path}`, {
 		headers: {
 			...headers,
-			'Client-Identifier': APP_NAME,
+			'Client-Identifier': env.APP_NAME,
 		},
 		...rest,
 	});
